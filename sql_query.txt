@@ -1,0 +1,36 @@
+-- create a table
+CREATE TABLE invoices (
+  id INTEGER PRIMARY KEY,
+  billingDate DATE NOT NULL,
+  costumerId TEXT NOT NULL
+);
+
+CREATE TABLE costumers (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  refferedBy INTEGER 
+);
+
+-- insert some values
+INSERT INTO invoices VALUES (1, '2023-01-01', '123');
+INSERT INTO invoices VALUES (2, '2023-02-02', '123');
+INSERT INTO invoices VALUES (3, '2023-01-03', '124');
+INSERT INTO invoices VALUES (4, '2023-01-04', '125');
+INSERT INTO invoices VALUES (5, '2023-01-05', '126');
+
+INSERT INTO costumers VALUES (123, 'John Mahone', NULL);
+INSERT INTO costumers VALUES (124, 'Michel Scofield', NULL);
+INSERT INTO costumers VALUES (125, 'Link Borrows', '124');
+INSERT INTO costumers VALUES (126, 'Sarra Tankredi', '124');
+
+
+    
+-- fetch some values
+SELECT t.invoiceId, t.costumer_name, t.billingDate, c.name as refferedByName
+FROM (
+    SELECT i.id as invoiceId, c.name as costumer_name, i.billingDate as billingDate, c.refferedBy as refferedBy
+    FROM invoices i
+    LEFT JOIN costumers c ON i.costumerId = c.id
+) t
+LEFT JOIN costumers c ON t.refferedBy = c.id
+ORDER BY billingDate
